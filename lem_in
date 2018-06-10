@@ -1,0 +1,23 @@
+#!/bin/sh
+if [ ! -z "$2" ]; then
+#handle error usage
+echo "usage: ./lem_in file"
+exit 1
+fi
+if [ ! -f $1 ]; then
+#handle non existing files
+echo "files "$1" doesn't exist"
+exit 1
+fi
+if [ ! -d class ]; then
+mkdir class
+#compile the app since it is not compiled, this is a hack
+javac -d class *.java
+fi
+if [ ! -z "$1" ]; then
+#all is well so we run the script
+java -classpath class bfs.BFS < $1 
+fi
+if [ -z "$1" ]; then
+echo "usage: ./lem_in file"
+fi
