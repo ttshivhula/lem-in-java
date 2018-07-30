@@ -10,7 +10,7 @@ import java.util.List;
  * is visited, neigbours is a list of type Vertex because all the neigbours have
  * all the properties of the Vertex class. we can define neigbours as rooms 
  * connected to a room. 
-*/
+ */
 
 public class Vertex {
 	private String name;

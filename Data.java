@@ -5,16 +5,37 @@ import java.util.LinkedList;
 import java.util.List;
 import java.io.*;
 
+/*
+ * This class reads the data from standard input and stores it in 
+ * the correct variables... Probably the worst one to explain
+ * bacause the code is dirty ;)
+ */
+
 public class Data {
+	
+	/* We need a linked list of type Vertex(See Vertex.java) to store
+	 * all the rooms, we also keep separate variables to store the start
+	 * end and the number of ants. Can probably be done better. But if
+	 * there is code and it sort of works that's what we go with. Well that
+	 * is true for code you don't care about
+	 */
+
 	private String line;
-	private int start_end = 0;
-	private List<String> r = new ArrayList<String>();
+	private int start_end = 0; //flag used to check if room is start or end
+	private List<String> r = new ArrayList<String>(); //Just a temp list that stores all lines read from Stdin
 	private List<Vertex> rooms = new LinkedList<Vertex>();
 	private String start = null;
 	private String end = null;
 	private int ants = -1;
 	private int errors = 0;
 	
+	/* Takes name of the string x and splits by space to get the room name
+	 * and add the room to the list and updates the error variable and set
+	 * it to 1 if there is an error, if the start_end flag was set then 
+	 * we use it to set the room as a starting or end then we resert the
+	 * flag
+	 */
+
 	private void add_rooms(String x) {
 		String str[] = x.split(" ");
 		if (str.length == 3) {
@@ -31,6 +52,10 @@ public class Data {
 		}
 	}
 	
+	/* Takes name of a rooms and loops through all the rooms and returns
+	 * the room that matches the name... else return null
+	 */
+
 	private Vertex getRoom(String name) {
 		for (Vertex x : rooms) {
 			if (x.getName().equals(name))
@@ -39,6 +64,13 @@ public class Data {
 		return (null);
 	}
 	
+	/* Connects two rooms together, takes string x and splits it by 
+	 * - and get the proper rooms using getRoom and then connect the rooms
+	 * using the addNeigbour(See Vertex.java). but also checks if there is
+	 * errors if there is then the errors variable is set to 1, damn i should
+	 * have just made errors a boolean.
+	 */
+
 	private void connect_rooms(String x) {
 		String str[] = x.split("-");
 		if (str.length == 2) {
@@ -50,7 +82,12 @@ public class Data {
 			v1.addNeigbour(v2);
 		}
 	}
-	
+
+	/* This loops through all the lines in the list (r) and
+	 * uses the data to set the number of ants, start, end rooms, add
+	 * rooms and connect rooms... Straight forward. CS101
+	 */
+
 	private void extract_info() {
 		
 		for (String x : r) {
@@ -67,6 +104,15 @@ public class Data {
 		}
 	}
 	
+	/*
+	 * Reads the data from the standard input using BafferefReader and replaces
+	 * all the comments using replaceAll(Built in), using C would have been fun though
+	 * every line that is read and after replacing the comments has a length greater than
+	 * 0 is added to the list(r). We always try and catch the error and print
+	 * Error provided there is an error. after all this not so interesting stuff
+	 * we call extrac_info. Extract info will extract all the useful information
+	 */
+
 	public void readData() {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		try {
@@ -81,7 +127,17 @@ public class Data {
 			System.out.println("\nError");
 		}
 		extract_info();
+		/*
+		 * We pass the start room getRoom(start) Vertex, name of the 
+		 * end room, number of ants and the errors variable
+		 * Move will try to solve the path using Breadth First Search 
+		 * provided we dont have errors.
+		 */
 		Move solve = new Move(getRoom(start), end, ants, errors);
+		/*
+		 * Provided there is a valid path(solution) print_path prints
+		 * the path else prints error. (See Move.java)
+		 */
 		solve.print_path();
 	}
 }
